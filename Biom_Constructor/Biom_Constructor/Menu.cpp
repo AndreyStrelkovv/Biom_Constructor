@@ -52,6 +52,19 @@ Menu::Menu() : wxMDIParentFrame(nullptr, wxID_ANY, "ANDY", wxPoint(100, 100), wx
 	b->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(Menu::selectColour), nullptr, this);
 	toolBar->AddControl(b);
 	toolBar->Realize();
+
+	//canvas = new Canvas(this);
+	//statusBar = this->CreateStatusBar(2, wxSTB_DEFAULT_STYLE, wxID_ANY);
+	//zoomSlider = new wxSlider(statusBar, 20001, 8, 1, 32);
+
+	//canvas->Show();
+}
+
+void Menu::OnZoomChange(wxCommandEvent& evt)
+{
+	statusBar->SetStatusText(wxString("Zoom: ") << zoomSlider->GetValue(), 1);
+	canvas->SetPixelSize(zoomSlider->GetValue());
+	evt.Skip();
 }
 
 Menu::~Menu()
