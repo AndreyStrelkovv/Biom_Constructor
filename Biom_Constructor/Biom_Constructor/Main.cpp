@@ -1,4 +1,6 @@
 #include "Main.h"
+#include "string"
+using std::string;
 
 wxBEGIN_EVENT_TABLE(Main, wxMDIParentFrame)
 	EVT_MENU(10001, Main::menuNew)
@@ -52,20 +54,7 @@ Main::Main() : wxMDIParentFrame(nullptr, wxID_ANY, "ANDY", wxPoint(100, 100), wx
 	b->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(Main::selectColour), nullptr, this);
 	toolBar->AddControl(b);
 	toolBar->Realize();
-
-	//canvas = new Canvas(this);
-	//statusBar = this->CreateStatusBar(2, wxSTB_DEFAULT_STYLE, wxID_ANY);
-	//zoomSlider = new wxSlider(statusBar, 20001, 8, 1, 32);
-
-	//canvas->Show();
 }
-
-//void Main::OnZoomChange(wxCommandEvent& evt)
-//{
-//	statusBar->SetStatusText(wxString("Zoom: ") << zoomSlider->GetValue(), 1);
-//	canvas->SetPixelSize(zoomSlider->GetValue());
-//	evt.Skip();
-//}
 
 Main::~Main()
 {
@@ -83,16 +72,40 @@ void Main::menuNew(wxCommandEvent& evt)
 
 void Main::menuOpen(wxCommandEvent& evt)
 {
+	if (GetActiveChild() == nullptr) {
+		string spriteFolderPath = "C:\\Users\\andre\\Desktop\\GitHub\\Biom_Constructor\\biom_files";
+		wxFileDialog dlg(this, "Open BiomFile File", spriteFolderPath, "", ".spr Files (*.spr)|*.spr", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+		if (dlg.ShowModal() == wxID_OK) {
+			ProjectFrame* p = new ProjectFrame(this, dlg.GetPath());
+			p->Open(dlg.GetPath());
+			p->Show();
+		}
+	}
+	evt.Skip();
 }
 
 void Main::menuSave(wxCommandEvent& evt)
 {
+	if (GetActiveChild() != nullptr) {
+		string spriteFolderPath = "C:\\Users\\andre\\Desktop\\GitHub\\Biom_Constructor\\biom_files";
+		wxFileDialog dlg(this, "Save BioM", spriteFolderPath, "", ".spr Files (*.spr)|*.spr", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+		if (dlg.ShowModal() == wxID_OK) {
+			((ProjectFrame*)GetActiveChild())->Save(dlg.GetPath());
+		}
+	}
+	evt.Skip();
 }
 
 void Main::menuExit(wxCommandEvent& evt)
 {
+	Close();
+	evt.Skip();
 }
 
 void Main::selectColour(wxCommandEvent& evt)
 {
+	int colour = evt.GetId() - 10100;
+	if (GetActiveChild() != nullptr) {
+		((ProjectFrame*)GetActiveChild())->SetColour(colour);
+	}
 }

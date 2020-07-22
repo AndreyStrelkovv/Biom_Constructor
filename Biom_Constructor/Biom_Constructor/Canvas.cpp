@@ -66,6 +66,10 @@ wxCoord Canvas::OnGetColumnWidth(size_t col) const
 
 void Canvas::OnMouseLeftDown(wxMouseEvent& evt)
 {
+	wxPosition s = GetVisibleBegin();
+	sprite[(evt.GetY() / pixelSize + s.GetRow()) * this->GetColumnCount() + (evt.GetX() / pixelSize + s.GetCol())] = colour;
+	this->Refresh(false);
+	evt.Skip();
 }
 
 void Canvas::OnDraw(wxDC& dc)
