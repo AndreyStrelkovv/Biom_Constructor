@@ -22,19 +22,56 @@ void ProjectFrame::SetColour(int c)
 
 bool ProjectFrame::Save(wxString sFileName)
 {
-	return false;
+	for (int i = 0; i < biomf.nWidth; i++) {
+		for (int j = 0; j < biomf.nHeight; j++) {
+			short colour = sprite[j * biomf.nWidth + i];
+
+			if (colour == 16) {
+				biomf.SetColour(i, j, 0);
+				biomf.SetGlyph(i, j, L' ');
+			}
+			else {
+				biomf.SetColour(i, j, colour);
+				biomf.SetGlyph(i, j, 0x2588);
+			}
+		}
+	}
+	return biomf.Save(sFileName.wc_str());
 }
 
 bool ProjectFrame::Open(wxString sFileName)
 {
-	return false;
+	if (!biomf.Load(sFileName.wc_str())) {
+		return false;
+	}
+	else {
+
+		delete[] sprite;
+		sprite = new unsigned char[biomf.nWidth * biomf.nHeight]{ 0 };
+
+		for (int i = 0; i < biomf.nWidth; i++) {
+			for (int j = 0; j < biomf.nHeight; j++) {
+				wchar_t glyph = biomf.GetGlyph(i, j);
+				short colour = biomf.GetColour(i, j);
+
+				if (glyph == L' ') {
+					sprite[j * biomf.nWidth + i] = 16;
+				}
+				else {
+					sprite[j * biomf.nWidth + i] = colour & 0x000F;
+				}
+			}
+		}
+	}
+	canvas->SetSpriteData(biomf.nHeight, biomf.nWidth, sprite);
+	return true;
 }
 
 bool ProjectFrame::New(int r, int c)
 {
-	delete[] m_pSprite;
-	m_pSprite = new unsigned char[r * c]{ 0 };
-	canvas->SetSpriteData(r, c, m_pSprite);
+	delete[] sprite;
+	sprite = new unsigned char[r * c]{ 0 };
+	canvas->SetSpriteData(r, c, sprite);
 	biomf = BiomFile(c, r);
 	return false;
 }
