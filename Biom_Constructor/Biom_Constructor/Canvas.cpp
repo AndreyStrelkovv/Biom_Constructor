@@ -1,14 +1,34 @@
 #include "Canvas.h"
+#include "wx/dcclient.h"
+#include "wx/dcmemory.h"
+#include "wx/dcbuffer.h"
 
 wxBEGIN_EVENT_TABLE(Canvas, wxHVScrolledWindow)
-//EVT_PAINT(cCanvas::OnPaint)
-//EVT_LEFT_DOWN(cCanvas::OnMouseLeftDown)
+	EVT_PAINT(Canvas::OnPaint)
+	EVT_LEFT_DOWN(Canvas::OnMouseLeftDown)
 wxEND_EVENT_TABLE()
 
 Canvas::Canvas(wxWindow* parent) : wxHVScrolledWindow(parent, wxID_ANY)
 {
-	SetRowColumnCount(40, 40);
+	//SetRowColumnCount(40, 40);
 	SetBackgroundStyle(wxBG_STYLE_PAINT);
+
+	palette[0] = wxColour(0, 0, 0);
+	palette[1] = wxColour(0, 0, 128);
+	palette[2] = wxColour(0, 128, 0);
+	palette[3] = wxColour(0, 128, 128);
+	palette[4] = wxColour(128, 0, 0);
+	palette[5] = wxColour(128, 0, 128);
+	palette[6] = wxColour(128, 128, 0);
+	palette[7] = wxColour(192, 192, 192);
+	palette[8] = wxColour(128, 128, 128);
+	palette[9] = wxColour(0, 0, 255);
+	palette[10] = wxColour(0, 255, 0);
+	palette[11] = wxColour(0, 255, 255);
+	palette[12] = wxColour(255, 0, 0);
+	palette[13] = wxColour(255, 0, 255);
+	palette[14] = wxColour(255, 255, 0);
+	palette[15] = wxColour(255, 255, 255);
 }
 
 Canvas::~Canvas()
@@ -23,6 +43,17 @@ void Canvas::SetPixelSize(int n)
 	Refresh();
 }
 
+void Canvas::SetSpriteData(int rows, int columns, unsigned char* pSprite)
+{
+	sprite = pSprite;
+	this->SetRowColumnCount(rows, columns);
+}
+
+void Canvas::SetColour(int c)
+{
+	colour = c;
+}
+
 wxCoord Canvas::OnGetRowHeight(size_t row) const
 {
 	return wxCoord(pixelSize);
@@ -31,6 +62,10 @@ wxCoord Canvas::OnGetRowHeight(size_t row) const
 wxCoord Canvas::OnGetColumnWidth(size_t col) const
 {
 	return wxCoord(pixelSize);
+}
+
+void Canvas::OnMouseLeftDown(wxMouseEvent& evt)
+{
 }
 
 void Canvas::OnDraw(wxDC& dc)
@@ -46,27 +81,27 @@ void Canvas::OnDraw(wxDC& dc)
 	pen.SetColour(wxColour(200, 200, 200));
 	dc.SetPen(pen);
 
-	dc.SetBrush(brush);
-	dc.DrawRectangle(20, 20, 200, 200);
-	//if (pixelSize <= 4) dc.SetPen(*wxTRANSPARENT_PEN);
+	//dc.SetBrush(brush);
+	//dc.DrawRectangle(20, 20, 200, 200);
+	if (pixelSize <= 4) dc.SetPen(*wxTRANSPARENT_PEN);
 
-	//for (int y = s.GetRow(); y < e.GetRow(); y++)
-	//	for (int x = s.GetCol(); x < e.GetCol(); x++) {
+	for (int y = s.GetRow(); y < e.GetRow(); y++)
+		for (int x = s.GetCol(); x < e.GetCol(); x++) {
 
-	//		int colour = m_pSprite[y * this->GetColumnCount() + x];
+			int colour = sprite[y * this->GetColumnCount() + x];
 
-	//		if (colour < 16) {
-	//			brush.SetColour(palette[colour]);
-	//			brush.SetStyle(wxBRUSHSTYLE_SOLID);
-	//		}
-	//		else {
-	//			brush.SetStyle(wxBrushStyle::wxBRUSHSTYLE_CROSSDIAG_HATCH);
-	//			brush.SetColour(wxColour(0, 0, 0));
-	//		}
+			if (colour < 16) {
+				brush.SetColour(palette[colour]);
+				brush.SetStyle(wxBRUSHSTYLE_SOLID);
+			}
+			else {
+				brush.SetStyle(wxBrushStyle::wxBRUSHSTYLE_CROSSDIAG_HATCH);
+				brush.SetColour(wxColour(0, 0, 0));
+			}
 
-	//		dc.SetBrush(brush);
-	//		dc.DrawRectangle(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
-	//	}
+			dc.SetBrush(brush);
+			dc.DrawRectangle(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
+		}
 
 }
 

@@ -12,7 +12,7 @@ App::~App()
 
 bool App::OnInit()
 {
-	menu = new Menu();
-	menu->Show();
+	main = new Main();
+	main->Show();
 	return true;
 }

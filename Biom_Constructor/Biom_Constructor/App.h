@@ -1,7 +1,7 @@
 #pragma once
 
 #include "wx/wx.h"
-#include "Menu.h"
+#include "Main.h"
 
 class App : public wxApp
 {
@@ -9,7 +9,7 @@ public:
 	App();
 	~App();
 private:
-	Menu* menu = nullptr;
+	Main* main = nullptr;
 public:
 	virtual bool OnInit();
 };

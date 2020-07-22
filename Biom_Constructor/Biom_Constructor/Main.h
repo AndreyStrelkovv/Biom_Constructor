@@ -1,24 +1,25 @@
 #pragma once
 #include "wx/wx.h"
-#include "wx/vscroll.h"
-#include "Canvas.h"
+#include "ProjectFrame.h"
+//#include "wx/vscroll.h"
+//#include "Canvas.h"
 
-class Menu : public wxMDIParentFrame
+class Main : public wxMDIParentFrame
 {
 public:
-	Menu();
-	~Menu();
+	Main();
+	~Main();
 
-private:
-	Canvas* canvas = nullptr;
-	wxStatusBar* statusBar = nullptr;
-	wxSlider* zoomSlider = nullptr;
+//private:
+//	Canvas* canvas = nullptr;
+//	wxStatusBar* statusBar = nullptr;
+//	wxSlider* zoomSlider = nullptr;
 
 private:
 	wxToolBar* toolBar = nullptr;
 	wxMenuBar* menuBar = nullptr;
 
-	void OnZoomChange(wxCommandEvent& evt);
+	//void OnZoomChange(wxCommandEvent& evt);
 
 	void menuNew(wxCommandEvent& evt);
 	void menuOpen(wxCommandEvent& evt);

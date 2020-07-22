@@ -1,25 +1,25 @@
-#include "Menu.h"
+#include "Main.h"
 
-wxBEGIN_EVENT_TABLE(Menu, wxMDIParentFrame)
-	EVT_MENU(10001, Menu::menuNew)
-	EVT_MENU(10002, Menu::menuOpen)
-	EVT_MENU(10003, Menu::menuSave)
-	EVT_MENU(10004, Menu::menuExit)
+wxBEGIN_EVENT_TABLE(Main, wxMDIParentFrame)
+	EVT_MENU(10001, Main::menuNew)
+	EVT_MENU(10002, Main::menuOpen)
+	EVT_MENU(10003, Main::menuSave)
+	EVT_MENU(10004, Main::menuExit)
 wxEND_EVENT_TABLE()
 
 
-Menu::Menu() : wxMDIParentFrame(nullptr, wxID_ANY, "ANDY", wxPoint(100, 100), wxSize(800, 600))
+Main::Main() : wxMDIParentFrame(nullptr, wxID_ANY, "ANDY", wxPoint(100, 100), wxSize(800, 600))
 {
 	menuBar = new wxMenuBar();
 	this->SetMenuBar(menuBar);
 
-	wxMenu* menuFile = new wxMenu();
-	menuFile->Append(10001, "New");
-	menuFile->Append(10002, "Open");
-	menuFile->Append(10003, "Save");
-	menuFile->Append(10004, "Exit");
+	wxMenu* MenuFile = new wxMenu();
+	MenuFile->Append(10001, "New");
+	MenuFile->Append(10002, "Open");
+	MenuFile->Append(10003, "Save");
+	MenuFile->Append(10004, "Exit");
 
-	menuBar->Append(menuFile, "File");
+	menuBar->Append(MenuFile, "File");
 
 	toolBar = this->CreateToolBar(wxTB_HORIZONTAL, wxID_ANY);
 
@@ -44,12 +44,12 @@ Menu::Menu() : wxMDIParentFrame(nullptr, wxID_ANY, "ANDY", wxPoint(100, 100), wx
 	for (int i = 0; i < 16; i++) {
 		wxButton* b = new wxButton(toolBar, 10100 + i, "", wxDefaultPosition, wxSize(40, 24), 0);
 		b->SetBackgroundColour(palette[i]);
-		b->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(Menu::selectColour), nullptr, this);
+		b->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(Main::selectColour), nullptr, this);
 		toolBar->AddControl(b);
 	}
 
 	wxButton* b = new wxButton(toolBar, 10100 + 16, "Alpha", wxDefaultPosition, wxDefaultSize, 0);
-	b->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(Menu::selectColour), nullptr, this);
+	b->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(Main::selectColour), nullptr, this);
 	toolBar->AddControl(b);
 	toolBar->Realize();
 
@@ -60,33 +60,39 @@ Menu::Menu() : wxMDIParentFrame(nullptr, wxID_ANY, "ANDY", wxPoint(100, 100), wx
 	//canvas->Show();
 }
 
-void Menu::OnZoomChange(wxCommandEvent& evt)
+//void Main::OnZoomChange(wxCommandEvent& evt)
+//{
+//	statusBar->SetStatusText(wxString("Zoom: ") << zoomSlider->GetValue(), 1);
+//	canvas->SetPixelSize(zoomSlider->GetValue());
+//	evt.Skip();
+//}
+
+Main::~Main()
 {
-	statusBar->SetStatusText(wxString("Zoom: ") << zoomSlider->GetValue(), 1);
-	canvas->SetPixelSize(zoomSlider->GetValue());
+}
+
+void Main::menuNew(wxCommandEvent& evt)
+{
+	if (GetActiveChild() == nullptr) {
+		ProjectFrame* p = new ProjectFrame(this, "Test");
+		p->New(50, 75);
+		p->Show();
+	}
 	evt.Skip();
 }
 
-Menu::~Menu()
+void Main::menuOpen(wxCommandEvent& evt)
 {
 }
 
-void Menu::menuNew(wxCommandEvent& evt)
+void Main::menuSave(wxCommandEvent& evt)
 {
 }
 
-void Menu::menuOpen(wxCommandEvent& evt)
+void Main::menuExit(wxCommandEvent& evt)
 {
 }
 
-void Menu::menuSave(wxCommandEvent& evt)
-{
-}
-
-void Menu::menuExit(wxCommandEvent& evt)
-{
-}
-
-void Menu::selectColour(wxCommandEvent& evt)
+void Main::selectColour(wxCommandEvent& evt)
 {
 }
