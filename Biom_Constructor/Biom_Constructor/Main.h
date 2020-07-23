@@ -2,6 +2,9 @@
 #include "wx/wx.h"
 #include "ProjectFrame.h"
 
+#include "vector"
+using std::vector;
+
 class Main : public wxMDIParentFrame
 {
 public:

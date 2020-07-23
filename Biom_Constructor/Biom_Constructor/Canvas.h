@@ -2,6 +2,9 @@
 #include "wx/wx.h"
 #include "wx/vscroll.h"
 
+#include "vector"
+using std::vector;
+
 class Canvas : public wxHVScrolledWindow
 {
 public:
@@ -18,7 +21,8 @@ public:
 
 private:
 	unsigned char* sprite = nullptr;
-	wxColour palette[16];
+	//wxColour palette[16];
+	vector<wxColour> elem;
 	int colour;
 
 private:
