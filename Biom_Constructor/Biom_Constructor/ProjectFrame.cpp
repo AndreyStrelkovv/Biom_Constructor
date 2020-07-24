@@ -13,6 +13,11 @@ ProjectFrame::ProjectFrame(wxMDIParentFrame* parent, wxString name) : wxMDIChild
 
 ProjectFrame::~ProjectFrame()
 {
+	if (sprite != nullptr) {
+		delete[] sprite;
+	}
+	//delete canvas;
+
 }
 
 void ProjectFrame::SetColour(int c)
@@ -25,15 +30,17 @@ bool ProjectFrame::Save(wxString sFileName)
 	for (int i = 0; i < biomf.nWidth; i++) {
 		for (int j = 0; j < biomf.nHeight; j++) {
 			short colour = sprite[j * biomf.nWidth + i];
+			biomf.SetColour(i, j, colour);
+			biomf.SetGlyph(i, j, 0x2588);
 
-			if (colour == 16) {
-				biomf.SetColour(i, j, 0);
-				biomf.SetGlyph(i, j, L' ');
-			}
-			else {
-				biomf.SetColour(i, j, colour);
-				biomf.SetGlyph(i, j, 0x2588);
-			}
+			//if (colour == 16) {
+			//	biomf.SetColour(i, j, 0);
+			//	biomf.SetGlyph(i, j, L' ');
+			//}
+			//else {
+			//	biomf.SetColour(i, j, colour);
+			//	biomf.SetGlyph(i, j, 0x2588);
+			//}
 		}
 	}
 	return biomf.Save(sFileName.wc_str());
@@ -51,15 +58,15 @@ bool ProjectFrame::Open(wxString sFileName)
 
 		for (int i = 0; i < biomf.nWidth; i++) {
 			for (int j = 0; j < biomf.nHeight; j++) {
-				wchar_t glyph = biomf.GetGlyph(i, j);
+				//wchar_t glyph = biomf.GetGlyph(i, j);
 				short colour = biomf.GetColour(i, j);
-
-				if (glyph == L' ') {
-					sprite[j * biomf.nWidth + i] = 16;
-				}
-				else {
-					sprite[j * biomf.nWidth + i] = colour & 0x000F;
-				}
+				sprite[j * biomf.nWidth + i] = colour & 0x000F;
+				//if (glyph == L' ') {
+				//	sprite[j * biomf.nWidth + i] = 16;
+				//}
+				//else {
+				//	sprite[j * biomf.nWidth + i] = colour & 0x000F;
+				//}
 			}
 		}
 	}

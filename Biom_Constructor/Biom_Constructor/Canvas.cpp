@@ -37,6 +37,7 @@ Canvas::Canvas(wxWindow* parent) : wxHVScrolledWindow(parent, wxID_ANY)
 
 Canvas::~Canvas()
 {
+	//delete[] sprite;
 }
 
 void Canvas::SetPixelSize(int n)

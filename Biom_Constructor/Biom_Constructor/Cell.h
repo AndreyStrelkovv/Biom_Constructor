@@ -7,6 +7,6 @@ public:
 
 private:
 	int temp;
-
+	int height;
 };
 

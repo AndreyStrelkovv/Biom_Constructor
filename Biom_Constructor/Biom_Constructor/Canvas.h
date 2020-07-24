@@ -20,8 +20,10 @@ public:
 	void SetColour(int c);
 
 private:
+
 	unsigned char* sprite = nullptr;
 	//wxColour palette[16];
+	//vector<unsigned char*> sprite;
 	vector<wxColour> elem;
 	int colour;
 

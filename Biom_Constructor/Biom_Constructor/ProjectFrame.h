@@ -154,6 +154,7 @@ private:
 	wxSlider* zoomSlider = nullptr;
 
 	BiomFile biomf;
+	//vector<unsigned char*> sprite;
 	unsigned char* sprite = nullptr;
 
 	void OnZoomChange(wxCommandEvent& evt);
