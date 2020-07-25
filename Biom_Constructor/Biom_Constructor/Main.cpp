@@ -27,7 +27,7 @@ Main::Main() : wxMDIParentFrame(nullptr, wxID_ANY, "ANDY", wxPoint(100, 100), wx
 	toolBar = this->CreateToolBar(wxTB_HORIZONTAL, wxID_ANY);
 
 	vector<wxColour> elem;
-	elem.push_back(wxColour(64, 164, 223));
+	elem.push_back(wxColour(10, 108, 255));
 	elem.push_back(wxColour(161, 64, 43));
 	elem.push_back(wxColour(80, 80, 80));
 	elem.push_back(wxColour(237, 201, 175));
@@ -94,7 +94,7 @@ void Main::menuSave(wxCommandEvent& evt)
 {
 	if (GetActiveChild() != nullptr) {
 		string spriteFolderPath = "C:\\Users\\andre\\Desktop\\GitHub\\Biom_Constructor\\biom_files";
-		wxFileDialog dlg(this, "Save BioM", spriteFolderPath, "", ".spr Files (*.spr)|*.spr", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+		wxFileDialog dlg(this, "Save BioMFile", spriteFolderPath, "", ".spr Files (*.spr)|*.spr", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 		if (dlg.ShowModal() == wxID_OK) {
 			((ProjectFrame*)GetActiveChild())->Save(dlg.GetPath());
 		}

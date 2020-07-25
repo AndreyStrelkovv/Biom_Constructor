@@ -13,10 +13,22 @@ Canvas::Canvas(wxWindow* parent) : wxHVScrolledWindow(parent, wxID_ANY)
 	//SetRowColumnCount(40, 40);
 	SetBackgroundStyle(wxBG_STYLE_PAINT);
 	
-	elem.push_back(wxColour(64, 164, 223));
+	elem.push_back(wxColour(10, 108, 255));
 	elem.push_back(wxColour(161, 64, 43));
 	elem.push_back(wxColour(80, 80, 80));
 	elem.push_back(wxColour(237, 201, 175));
+
+	waterdepth.push_back(wxColour(10, 108, 255));
+	waterdepth.push_back(wxColour(5, 101, 243));
+	waterdepth.push_back(wxColour(7, 93, 220));
+	waterdepth.push_back(wxColour(8, 84, 199));
+	waterdepth.push_back(wxColour(7, 74, 175));
+	waterdepth.push_back(wxColour(6, 64, 152));
+	waterdepth.push_back(wxColour(5, 56, 132));
+	waterdepth.push_back(wxColour(5, 49, 117));
+	waterdepth.push_back(wxColour(3, 43, 102));
+	waterdepth.push_back(wxColour(3, 36, 85));
+
 	//palette[0] = wxColour(0, 0, 0);
 	//palette[1] = wxColour(0, 0, 128);
 	//palette[2] = wxColour(0, 128, 0);
@@ -37,7 +49,9 @@ Canvas::Canvas(wxWindow* parent) : wxHVScrolledWindow(parent, wxID_ANY)
 
 Canvas::~Canvas()
 {
-	//delete[] sprite;
+	//if (sprite != nullptr) {
+	//	delete sprite;
+	//}
 }
 
 void Canvas::SetPixelSize(int n)
@@ -51,6 +65,11 @@ void Canvas::SetPixelSize(int n)
 void Canvas::SetSpriteData(int rows, int columns, unsigned char* pSprite)
 {
 	sprite = pSprite;
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
+			cells.push_back(Cell(0, 1, sprite[j * this->GetColumnCount() + i]));
+		}
+	}
 	this->SetRowColumnCount(rows, columns);
 }
 
@@ -72,7 +91,35 @@ wxCoord Canvas::OnGetColumnWidth(size_t col) const
 void Canvas::OnMouseLeftDown(wxMouseEvent& evt)
 {
 	wxPosition s = GetVisibleBegin();
-	sprite[(evt.GetY() / pixelSize + s.GetRow()) * this->GetColumnCount() + (evt.GetX() / pixelSize + s.GetCol())] = colour;
+	int p = (evt.GetY() / pixelSize + s.GetRow()) * this->GetColumnCount() + (evt.GetX() / pixelSize + s.GetCol());
+
+	//if (cells[p].getType() == colour) {
+	//	cells[p].setHeight(cells[p].getHeight() + 1);
+
+	//	if (cells[p].getType() == 0) {
+	//		brush.SetColour(waterdepth[cells[p].getHeight()]);
+	//		sprite = waterdepth[cells[p].getHeight()];
+	//	}
+	//	else {
+	//		brush.SetColour(elem[colour]);
+	//	}
+	//}
+	//else {
+	//	cells[p].setHeight(1);
+	//	sprite[p] = colour;
+	//	brush.SetColour(elem[colour]);
+	//}
+
+	sprite[p] = colour;
+	
+	if (cells[p].getType() == colour) {
+		cells[p].setHeight(cells[p].getHeight() + 1);
+	}
+	else {
+		cells[p].setHeight(1);
+		cells[p].setType(colour);
+	}
+
 	this->Refresh(false);
 	evt.Skip();
 }
@@ -97,10 +144,21 @@ void Canvas::OnDraw(wxDC& dc)
 	for (int y = s.GetRow(); y < e.GetRow(); y++)
 		for (int x = s.GetCol(); x < e.GetCol(); x++) {
 
-			int colour = sprite[y * this->GetColumnCount() + x];
+			int p = y * this->GetColumnCount() + x;
 
-			brush.SetColour(elem[colour]);
-			brush.SetStyle(wxBRUSHSTYLE_SOLID);
+			int colour = sprite[p];
+
+			if (cells[p].getType() == 0 && colour == 0) {
+				brush.SetColour(waterdepth[cells[p].getHeight()]);
+				brush.SetStyle(wxBRUSHSTYLE_SOLID);
+			}
+			else {
+				brush.SetColour(elem[colour]);
+				brush.SetStyle(wxBRUSHSTYLE_SOLID);
+			}
+
+			//brush.SetColour(elem[colour]);
+			//brush.SetStyle(wxBRUSHSTYLE_SOLID);
 			//if (colour < 16) {
 			//	brush.SetColour(elem[colour]);
 			//	brush.SetStyle(wxBRUSHSTYLE_SOLID);

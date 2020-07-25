@@ -43,6 +43,7 @@ private:
 	}
 
 public:
+
 	void SetGlyph(int x, int y, short c)
 	{
 		if (x < 0 || x >= nWidth || y < 0 || y >= nHeight)

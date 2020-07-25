@@ -14,10 +14,8 @@ ProjectFrame::ProjectFrame(wxMDIParentFrame* parent, wxString name) : wxMDIChild
 ProjectFrame::~ProjectFrame()
 {
 	if (sprite != nullptr) {
-		delete[] sprite;
+		delete sprite;
 	}
-	//delete canvas;
-
 }
 
 void ProjectFrame::SetColour(int c)

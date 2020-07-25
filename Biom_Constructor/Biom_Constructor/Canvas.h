@@ -1,6 +1,7 @@
 #pragma once
 #include "wx/wx.h"
 #include "wx/vscroll.h"
+#include "Cell.h"
 
 #include "vector"
 using std::vector;
@@ -16,7 +17,7 @@ private:
 
 public:
 	void SetPixelSize(int n);
-	void SetSpriteData(int rows, int columns, unsigned char* pSprite);
+	void SetSpriteData(int rows, int columns, unsigned char *pSprite);
 	void SetColour(int c);
 
 private:
@@ -26,6 +27,11 @@ private:
 	//vector<unsigned char*> sprite;
 	vector<wxColour> elem;
 	int colour;
+
+private:
+	//vector that contains information about every cell
+	vector<Cell> cells;
+	vector<wxColour> waterdepth;
 
 private:
 	virtual wxCoord OnGetRowHeight(size_t row) const;
