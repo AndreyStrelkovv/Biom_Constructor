@@ -40,3 +40,9 @@ int Cell::getType()
 {
 	return type;
 }
+
+string Cell::toString()
+{
+	string str = "height = " + to_string(height) + "; temp = " + to_string(temp) + "; type = " + to_string(type);
+	return str;
+}

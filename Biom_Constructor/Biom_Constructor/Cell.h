@@ -1,4 +1,8 @@
 #pragma once
+#include "string"
+using std::string;
+using std::to_string;
+
 class Cell
 {
 public:
@@ -18,5 +22,7 @@ public:
 
 	int getHeight();
 	int getType();
+
+	string toString();
 };
 

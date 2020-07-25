@@ -3,16 +3,27 @@
 #include "wx/dcmemory.h"
 #include "wx/dcbuffer.h"
 
+#include "iostream"
+using std::endl;
+using std::cout;
+using std::ostringstream;
+
+#include "ProjectFrame.h"
+
 wxBEGIN_EVENT_TABLE(Canvas, wxHVScrolledWindow)
 	EVT_PAINT(Canvas::OnPaint)
 	EVT_LEFT_DOWN(Canvas::OnMouseLeftDown)
+	EVT_RIGHT_DOWN(Canvas::OnMouseRightDown)
 wxEND_EVENT_TABLE()
 
-Canvas::Canvas(wxWindow* parent) : wxHVScrolledWindow(parent, wxID_ANY)
+Canvas::Canvas(wxWindow* p) : wxHVScrolledWindow(p, wxID_ANY)
 {
 	//SetRowColumnCount(40, 40);
-	SetBackgroundStyle(wxBG_STYLE_PAINT);
-	
+	parent = p;
+	//SetBackgroundStyle(wxBG_STYLE_PAINT);
+
+	/*cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;*/
+	OutputDebugStringA("Some random text");
 	elem.push_back(wxColour(10, 108, 255));
 	elem.push_back(wxColour(161, 64, 43));
 	elem.push_back(wxColour(80, 80, 80));
@@ -93,23 +104,6 @@ void Canvas::OnMouseLeftDown(wxMouseEvent& evt)
 	wxPosition s = GetVisibleBegin();
 	int p = (evt.GetY() / pixelSize + s.GetRow()) * this->GetColumnCount() + (evt.GetX() / pixelSize + s.GetCol());
 
-	//if (cells[p].getType() == colour) {
-	//	cells[p].setHeight(cells[p].getHeight() + 1);
-
-	//	if (cells[p].getType() == 0) {
-	//		brush.SetColour(waterdepth[cells[p].getHeight()]);
-	//		sprite = waterdepth[cells[p].getHeight()];
-	//	}
-	//	else {
-	//		brush.SetColour(elem[colour]);
-	//	}
-	//}
-	//else {
-	//	cells[p].setHeight(1);
-	//	sprite[p] = colour;
-	//	brush.SetColour(elem[colour]);
-	//}
-
 	sprite[p] = colour;
 	
 	if (cells[p].getType() == colour) {
@@ -121,6 +115,17 @@ void Canvas::OnMouseLeftDown(wxMouseEvent& evt)
 	}
 
 	this->Refresh(false);
+	evt.Skip();
+}
+
+void Canvas::OnMouseRightDown(wxMouseEvent& evt)
+{
+	wxPosition s = GetVisibleBegin();
+	int p = (evt.GetY() / pixelSize + s.GetRow()) * this->GetColumnCount() + (evt.GetX() / pixelSize + s.GetCol());
+	//OutputDebugStringA("!!!!!!!!!!!!!!!!!!!!!!!");
+	//OutputDebugStringA(cells[p].toString().c_str());
+
+	((ProjectFrame*)parent)->setStatusBar(cells[p].toString());
 	evt.Skip();
 }
 

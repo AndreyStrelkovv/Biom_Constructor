@@ -7,7 +7,7 @@ wxEND_EVENT_TABLE()
 ProjectFrame::ProjectFrame(wxMDIParentFrame* parent, wxString name) : wxMDIChildFrame(parent, wxID_ANY, name)
 {
 	canvas = new Canvas(this);
-	statusBar = this->CreateStatusBar(2, wxSTB_DEFAULT_STYLE, wxID_ANY);
+	statusBar = this->CreateStatusBar(3, wxSTB_DEFAULT_STYLE, wxID_ANY);
 	zoomSlider = new wxSlider(statusBar, 20001, 8, 1, 32);
 }
 
@@ -79,6 +79,11 @@ bool ProjectFrame::New(int r, int c)
 	canvas->SetSpriteData(r, c, sprite);
 	biomf = BiomFile(c, r);
 	return false;
+}
+
+void ProjectFrame::setStatusBar(string str)
+{
+	statusBar->SetStatusText(wxString(str), 2);
 }
 
 void ProjectFrame::OnZoomChange(wxCommandEvent& evt)

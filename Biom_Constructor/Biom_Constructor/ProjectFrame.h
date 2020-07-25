@@ -149,6 +149,8 @@ public:
 	bool Open(wxString sFileName);
 	bool New(int r, int c);
 
+	void setStatusBar(string str);
+
 private:
 	Canvas* canvas = nullptr;
 	wxStatusBar* statusBar = nullptr;

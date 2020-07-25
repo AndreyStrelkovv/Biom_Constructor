@@ -6,6 +6,9 @@
 #include "vector"
 using std::vector;
 
+#include "string"
+using std::string;
+
 class Canvas : public wxHVScrolledWindow
 {
 public:
@@ -23,6 +26,7 @@ public:
 private:
 
 	unsigned char* sprite = nullptr;
+	wxWindow* parent;
 	//wxColour palette[16];
 	//vector<unsigned char*> sprite;
 	vector<wxColour> elem;
@@ -38,6 +42,8 @@ private:
 	virtual wxCoord OnGetColumnWidth(size_t col) const;
 
 	void OnMouseLeftDown(wxMouseEvent& evt);
+	void OnMouseRightDown(wxMouseEvent& evt);
+
 
 	void OnDraw(wxDC& dc);
 	void OnPaint(wxPaintEvent& evt);
