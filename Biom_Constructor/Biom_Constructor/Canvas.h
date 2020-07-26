@@ -31,6 +31,7 @@ private:
 	//vector<unsigned char*> sprite;
 	vector<wxColour> elem;
 	int colour;
+	int x, y;
 
 private:
 	//vector that contains information about every cell
@@ -38,10 +39,13 @@ private:
 	vector<wxColour> waterdepth;
 
 private:
+	void changeCellData(int i, int j);
+
 	virtual wxCoord OnGetRowHeight(size_t row) const;
 	virtual wxCoord OnGetColumnWidth(size_t col) const;
 
 	void OnMouseLeftDown(wxMouseEvent& evt);
+	void OnMouseLeftUp(wxMouseEvent& evt);
 	void OnMouseRightDown(wxMouseEvent& evt);
 
 

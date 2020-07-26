@@ -13,6 +13,7 @@ using std::ostringstream;
 wxBEGIN_EVENT_TABLE(Canvas, wxHVScrolledWindow)
 	EVT_PAINT(Canvas::OnPaint)
 	EVT_LEFT_DOWN(Canvas::OnMouseLeftDown)
+	EVT_LEFT_UP(Canvas::OnMouseLeftUp)
 	EVT_RIGHT_DOWN(Canvas::OnMouseRightDown)
 wxEND_EVENT_TABLE()
 
@@ -102,10 +103,57 @@ wxCoord Canvas::OnGetColumnWidth(size_t col) const
 void Canvas::OnMouseLeftDown(wxMouseEvent& evt)
 {
 	wxPosition s = GetVisibleBegin();
-	int p = (evt.GetY() / pixelSize + s.GetRow()) * this->GetColumnCount() + (evt.GetX() / pixelSize + s.GetCol());
+
+	x = evt.GetX() / pixelSize + s.GetCol();
+	y = evt.GetY() / pixelSize + s.GetRow();
+}
+
+void Canvas::OnMouseLeftUp(wxMouseEvent& evt)
+{
+	wxPosition s = GetVisibleBegin();
+
+	int x1 = evt.GetX() / pixelSize + s.GetCol();
+	int y1 = evt.GetY() / pixelSize + s.GetRow();
+
+	if (x1 <= x && y1 <= y) {
+		for (int i = x1; i <= x; i++) {
+			for (int j = y1; j <= y; j++) {
+				changeCellData(i, j);
+			}
+		}
+	}
+	else if (x1 >= x && y1 <= y) {
+		for (int i = x; i <= x1; i++) {
+			for (int j = y1; j <= y; j++) {
+				changeCellData(i, j);
+			}
+		}
+	}
+	else if (x1 <= x && y1 >= y) {
+		for (int i = x1; i <= x; i++) {
+			for (int j = y; j <= y1; j++) {
+				changeCellData(i, j);
+			}
+		}
+	}
+	else if (x1 >= x && y1 >= y) {
+		for (int i = x; i <= x1; i++) {
+			for (int j = y; j <= y1; j++) {
+				changeCellData(i, j);
+			}
+		}
+	}
+
+	this->Refresh(false);
+	evt.Skip();
+}
+
+void Canvas::changeCellData(int i, int j)
+{
+	int p = j * this->GetColumnCount() + i;
 
 	sprite[p] = colour;
-	
+
 	if (cells[p].getType() == colour) {
 		cells[p].setHeight(cells[p].getHeight() + 1);
 	}
@@ -113,17 +161,12 @@ void Canvas::OnMouseLeftDown(wxMouseEvent& evt)
 		cells[p].setHeight(1);
 		cells[p].setType(colour);
 	}
-
-	this->Refresh(false);
-	evt.Skip();
 }
 
 void Canvas::OnMouseRightDown(wxMouseEvent& evt)
 {
 	wxPosition s = GetVisibleBegin();
 	int p = (evt.GetY() / pixelSize + s.GetRow()) * this->GetColumnCount() + (evt.GetX() / pixelSize + s.GetCol());
-	//OutputDebugStringA("!!!!!!!!!!!!!!!!!!!!!!!");
-	//OutputDebugStringA(cells[p].toString().c_str());
 
 	((ProjectFrame*)parent)->setStatusBar(cells[p].toString());
 	evt.Skip();
